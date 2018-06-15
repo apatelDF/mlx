@@ -74,4 +74,4 @@ if __name__ == "__main__":
         if(temp > ALERT_TEMP):
             print("SENDING DATA")
             streamer.log(temp)
-            streamer.flush()
+            sleep(10)
