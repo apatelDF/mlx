@@ -48,7 +48,7 @@ class MLX90614():
             try:
                 return self.bus.read_word_data(self.address, reg_addr)
             except IOError as e:
-                #"Rate limiting" - sleeping to prevent problems with sensor
+                #"Rate limiting" - sleeping to prevent problems with sensor 
                 #when requesting data too quickly
                 sleep(self.comm_sleep_amount)
         #By this time, we made a couple requests and the sensor didn't respond
@@ -72,27 +72,29 @@ class MLX90614():
 if __name__ == "__main__":
     # Setup the Sheets API
     # Must log into account on browser and aprove use once
-    # Must have API key saved as client_secret.json in same directory
     store = file.Storage('credentials.json')
     creds = store.get()
     if not creds or creds.invalid:
         flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
         creds = tools.run_flow(flow, store)
     service = build('sheets', 'v4', http=creds.authorize(Http()))
-
+    
     sensor = MLX90614()
+    print('reading tempature')
     while(True):
         vals = [[]]
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
+            print('HIGH HEAT DETECTED')
             date = str(datetime.datetime.today()).split()[0]
             time = str(datetime.datetime.today()).split()[1]
             # Store vales in a 2d array to be uploaded
             vals[0].append(date)
             vals[0].append(time)
             vals[0].append(str(temp))
-
+            
             # Call the Sheets API
+            print('uploading to sheets')
             body = {
                 'values': vals
             }
@@ -101,3 +103,6 @@ if __name__ == "__main__":
                 range='A1',
                 valueInputOption='USER_ENTERED',
                 body=body).execute()
+            
+            print('reading tempature')
+                
