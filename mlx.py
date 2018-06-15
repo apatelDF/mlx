@@ -72,4 +72,5 @@ if __name__ == "__main__":
         vals = [[]]
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
+            print("SENDING DATA")
             streamer.log(temp, "Tempature")
