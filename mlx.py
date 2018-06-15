@@ -10,9 +10,6 @@ import datetime
 
 ALERT_TEMP = 86 #150
 
-#Sheets API info
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-SPREADSHEET_ID = '1i7hpVYx8hqEttTNwG466T8QIJRDzamklTQF5cwYoVN8'
 
 
 class MLX90614():
