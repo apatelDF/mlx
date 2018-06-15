@@ -74,4 +74,4 @@ if __name__ == "__main__":
         if(temp > ALERT_TEMP):
             print("SENDING DATA")
             streamer.log("Tempature", temp)
-            sleep(10)
+            sleep(.1)
