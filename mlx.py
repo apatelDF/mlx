@@ -1,3 +1,7 @@
+from __future__ import print_function
+from apiclient.discovery import build
+from httplib2 import Http
+from oauth2client import file, client, tools
 import csv
 import smbus
 from time import sleep
@@ -63,6 +67,16 @@ class MLX90614():
 
 
 if __name__ == "__main__":
+    # Setup the Sheets API
+    # Must log into account on browser and aprove use once
+    # Must have API key saved as client_secret.json in same directory
+    store = file.Storage('credentials.json')
+    creds = store.get()
+    if not creds or creds.invalid:
+        flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
+        creds = tools.run_flow(flow, store)
+    service = build('sheets', 'v4', http=creds.authorize(Http()))
+
     sensor = MLX90614()
     while(True):
         vals = [[]]
