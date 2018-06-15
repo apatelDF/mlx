@@ -6,7 +6,7 @@ from ISStreamer.Streamer import Streamer
 
 # Initialize the Initial State streamer
 # Be sure to add your unique access key
-streamer = Streamer(bucket_name=":mlx", bucket_key="YELW385UHR5H", access_key="9VeaSMSuFuisTByW8bmQLZWUOJ01XaR7")
+streamer = Streamer(bucket_name=":mlx:Tempature", bucket_key="YELW385UHR5H", access_key="9VeaSMSuFuisTByW8bmQLZWUOJ01XaR7")
 
 ALERT_TEMP = 86 #150
 
