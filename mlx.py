@@ -6,7 +6,7 @@ import requests
 ALERT_TEMP = 86 #150
 
 #ubidpots API info
-TOKEN = 'A1E-1O6GYF9lvmjQHiRhPvy8R3jkQrc9Qn'
+TOKEN = 'A1E-I2rDWsU0ogLS6dVD5ZYUsamsyyDWyK'
 
 
 class MLX90614():
@@ -64,9 +64,9 @@ class MLX90614():
 
 
 if __name__ == "__main__":
-    http://things.ubidots.com/api/v1.6/devices/demo/
     sensor = MLX90614()
     print('reading tempature')
+    while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
@@ -76,4 +76,4 @@ if __name__ == "__main__":
             headers = {'X-API-TOKEN': TOKEN}
             payload = {'Temperature': temp}
 
-            r = requests.post("http://foo.com/foo/bar", data=payload, headers=headers)
+            r = requests.post("http://things.ubidots.com/api/v1.6/devices/demo/", data=payload, headers=headers)
