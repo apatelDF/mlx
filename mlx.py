@@ -1,14 +1,20 @@
 from time import sleep
 import smbus
 import datetime
-import requests
-
+from losantmqtt import Device
 
 ALERT_TEMP = 86 #150
 
-#ubidpots API info
-TOKEN = 'A1E-I2rDWsU0ogLS6dVD5ZYUsamsyyDWyK'
 
+
+# Construct device
+device = Device("5b27e1b5fcb97000088d3ae4", "ba822b53-35b3-4f2b-8ee5-714e400e9a30", "a81d40569a864b3124f692442bb550ccd36261cc81f78fd3a275564c86f18e9e")
+
+# Listen for commands.
+device.add_event_observer("command", on_command)
+
+# Connect to Losant.
+device.connect(blocking=False)
 
 class MLX90614():
 
@@ -71,11 +77,5 @@ if __name__ == "__main__":
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            date = str(datetime.datetime.today()).split()[0]
-            time = str(datetime.datetime.today()).split()[1]
-
-            headers = {'X-API-TOKEN': TOKEN}
-            payload = {'Temperature': temp}
-
-            r = requests.post("http://things.ubidots.com/api/v1.6/devices/demo/", data=payload, headers=headers)
-            print(r)
+            if(device.is_connected()):
+                device.send_state({"temperature": temp})
