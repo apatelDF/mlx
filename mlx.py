@@ -14,7 +14,7 @@ def on_command(device, command):
     print("Command received.")
     print(command["name"])
     print(command["payload"])
-    
+
 # Listen for commands.
 device.add_event_observer("command", on_command)
 
@@ -79,6 +79,7 @@ if __name__ == "__main__":
     sensor = MLX90614()
     print('reading tempature')
     while(True):
+        device.loop()
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
