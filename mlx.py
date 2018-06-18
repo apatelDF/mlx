@@ -10,6 +10,11 @@ ALERT_TEMP = 86 #150
 # Construct device
 device = Device("5b27e1b5fcb97000088d3ae4", "ba822b53-35b3-4f2b-8ee5-714e400e9a30", "a81d40569a864b3124f692442bb550ccd36261cc81f78fd3a275564c86f18e9e")
 
+def on_command(device, command):
+    print("Command received.")
+    print(command["name"])
+    print(command["payload"])
+    
 # Listen for commands.
 device.add_event_observer("command", on_command)
 
@@ -69,10 +74,6 @@ class MLX90614():
         data = self.read_reg(self.MLX90614_TOBJ1)
         return self.data_to_temp(data)
 
-def on_command(device, command):
-    print("Command received.")
-    print(command["name"])
-    print(command["payload"])
 
 if __name__ == "__main__":
     sensor = MLX90614()
