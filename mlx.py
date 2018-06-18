@@ -1,7 +1,8 @@
 from time import sleep
 import smbus
 import datetime
-import requests
+import paho.mqtt.client as mqtt
+import json
 
 ALERT_TEMP = 86 #150
 
@@ -61,11 +62,27 @@ class MLX90614():
 
 if __name__ == "__main__":
     sensor = MLX90614()
+
+    THINGSBOARD_HOST = 'demo.thingsboard.io'
+    ACCESS_TOKEN = 'vfNbBlqPnvGcJLcAAnxC'
+    sensor_data = {'temperature': 0}
+    client = mqtt.Client()
+
+    # Set access token
+    client.username_pw_set(ACCESS_TOKEN)
+    # Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
+    client.connect(THINGSBOARD_HOST, 1883, 60)
+    client.loop_start()
+
     print('reading tempature')
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            r = requests.get("https://api.thingspeak.com/update?api_key=8857OIOJQMG0T1IX&field1=" + str(temp))
-            print(r.text)
+            sensor_data['temperature'] = temp
+            # Sending temperature data to ThingsBoard
+            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
             print(temp)
+
+    client.loop_stop()
+    client.disconnect()
