@@ -1,18 +1,12 @@
-from __future__ import print_function
-from apiclient.discovery import build
-from httplib2 import Http
-from oauth2client import file, client, tools
-import csv
-import smbus
 from time import sleep
 import datetime
+import requests
 
 
 ALERT_TEMP = 86 #150
 
-#Sheets API info
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-SPREADSHEET_ID = '1i7hpVYx8hqEttTNwG466T8QIJRDzamklTQF5cwYoVN8'
+#ubidpots API info
+TOKEN = 'A1E-1O6GYF9lvmjQHiRhPvy8R3jkQrc9Qn'
 
 
 class MLX90614():
@@ -48,7 +42,7 @@ class MLX90614():
             try:
                 return self.bus.read_word_data(self.address, reg_addr)
             except IOError as e:
-                #"Rate limiting" - sleeping to prevent problems with sensor 
+                #"Rate limiting" - sleeping to prevent problems with sensor
                 #when requesting data too quickly
                 sleep(self.comm_sleep_amount)
         #By this time, we made a couple requests and the sensor didn't respond
@@ -70,39 +64,16 @@ class MLX90614():
 
 
 if __name__ == "__main__":
-    # Setup the Sheets API
-    # Must log into account on browser and aprove use once
-    store = file.Storage('credentials.json')
-    creds = store.get()
-    if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
-        creds = tools.run_flow(flow, store)
-    service = build('sheets', 'v4', http=creds.authorize(Http()))
-    
+    http://things.ubidots.com/api/v1.6/devices/demo/
     sensor = MLX90614()
     print('reading tempature')
-    while(True):
-        vals = [[]]
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
             date = str(datetime.datetime.today()).split()[0]
             time = str(datetime.datetime.today()).split()[1]
-            # Store vales in a 2d array to be uploaded
-            vals[0].append(date)
-            vals[0].append(time)
-            vals[0].append(str(temp))
-            
-            # Call the Sheets API
-            print('uploading to sheets')
-            body = {
-                'values': vals
-            }
-            result = service.spreadsheets().values().append(
-                spreadsheetId = SPREADSHEET_ID,
-                range='A1',
-                valueInputOption='USER_ENTERED',
-                body=body).execute()
-            
-            print('reading tempature')
-                
+
+            headers = {'X-API-TOKEN': TOKEN}
+            payload = {'Temperature': temp}
+
+            r = requests.post("http://foo.com/foo/bar", data=payload, headers=headers)
