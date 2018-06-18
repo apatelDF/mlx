@@ -67,3 +67,5 @@ if __name__ == "__main__":
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
             r = requests.get("https://api.thingspeak.com/update?api_key=8857OIOJQMG0T1IX&field1=1" + str(temp))
+            print(r.text)
+            print(temp)
