@@ -1,25 +1,9 @@
 from time import sleep
 import smbus
 import datetime
-from losantmqtt import Device
+import request
 
 ALERT_TEMP = 86 #150
-
-
-
-# Construct device
-device = Device("5b27e1b5fcb97000088d3ae4", "ba822b53-35b3-4f2b-8ee5-714e400e9a30", "a81d40569a864b3124f692442bb550ccd36261cc81f78fd3a275564c86f18e9e")
-
-def on_command(device, command):
-    print("Command received.")
-    print(command["name"])
-    print(command["payload"])
-
-# Listen for commands.
-device.add_event_observer("command", on_command)
-
-# Connect to Losant.
-device.connect(blocking=False)
 
 class MLX90614():
 
@@ -79,9 +63,7 @@ if __name__ == "__main__":
     sensor = MLX90614()
     print('reading tempature')
     while(True):
-        device.loop()
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            if(device.is_connected()):
-                device.send_state({"temperature": temp})
+            r = request.get("https://api.thingspeak.com/update?api_key=8857OIOJQMG0T1IX&field1=1" + str(temp))
