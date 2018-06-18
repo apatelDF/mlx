@@ -69,6 +69,10 @@ class MLX90614():
         data = self.read_reg(self.MLX90614_TOBJ1)
         return self.data_to_temp(data)
 
+def on_command(device, command):
+    print("Command received.")
+    print(command["name"])
+    print(command["payload"])
 
 if __name__ == "__main__":
     sensor = MLX90614()
