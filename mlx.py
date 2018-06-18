@@ -77,3 +77,4 @@ if __name__ == "__main__":
             payload = {'Temperature': temp}
 
             r = requests.post("http://things.ubidots.com/api/v1.6/devices/demo/", data=payload, headers=headers)
+            print(r)
