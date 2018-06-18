@@ -6,7 +6,12 @@ from ISStreamer.Streamer import Streamer
 
 # Initialize the Initial State streamer
 # Be sure to add your unique access key
-streamer = Streamer(bucket_name=":mlx:Tempature", bucket_key="YELW385UHR5H", access_key="9VeaSMSuFuisTByW8bmQLZWUOJ01XaR7")
+credentials_file = os.path.join(os.path.dirname(_file_), "credentials
+f_is = open(credentials_file, "r")
+credentials_is = json.load(f_is)
+f.close()
+
+streamer = Streamer(bucket_name=":mlx:Tempature", bucket_key = credentials_is['BUCKET_KEY'], access_key = credentials_is['ACCESS_KEY'])
 
 ALERT_TEMP = 86 #150
 
