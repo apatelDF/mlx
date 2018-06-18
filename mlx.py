@@ -1,7 +1,7 @@
 from time import sleep
 import smbus
 import datetime
-import request
+import requests
 
 ALERT_TEMP = 86 #150
 
@@ -66,4 +66,4 @@ if __name__ == "__main__":
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            r = request.get("https://api.thingspeak.com/update?api_key=8857OIOJQMG0T1IX&field1=1" + str(temp))
+            r = requests.get("https://api.thingspeak.com/update?api_key=8857OIOJQMG0T1IX&field1=1" + str(temp))
