@@ -83,6 +83,7 @@ if __name__ == "__main__":
             # Sending temperature data to ThingsBoard
             client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
             print(temp)
+            sleep(1)
 
     client.loop_stop()
     client.disconnect()
