@@ -68,9 +68,10 @@ class MLX90614():
         for i in range(self.comm_retries):
             try:
                 self.bus.write_word_data(self.address, self.MLX90614_EMISS,toWrite)
+                return True
             except IOError as e:
                 sleep(self.comm_sleep_amount)
-        raise e
+        return False;
 
 if __name__ == "__main__":
     sensor = MLX90614()
@@ -88,7 +89,7 @@ if __name__ == "__main__":
 
     print('reading tempature')
     print(sensor.read_emiss())
-    sensor.set_emiss(.98)
+    print(sensor.set_emiss(.98))
     print(sensor.read_emiss())
     while(True):
         temp = sensor.get_obj_temp() #get temp
