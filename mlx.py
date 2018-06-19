@@ -65,9 +65,12 @@ class MLX90614():
 
     def set_emiss(self, emiss):
         toWrite = int(emiss * 65535.0)
-        return self.bus.write_word_data(self.MLX90614_EMISS,0,toWrite)
-
-
+        for i in range(self.comm_retries):
+            try:
+                return self.bus.write_word_data(self.MLX90614_EMISS,0,toWrite)
+            except IOError as e:
+                sleep(self.comm_sleep_amount)
+        raise e
 
 if __name__ == "__main__":
     sensor = MLX90614()
