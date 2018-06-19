@@ -59,6 +59,10 @@ class MLX90614():
         data = self.read_reg(self.MLX90614_TOBJ1)
         return self.data_to_temp(data)
 
+    def read_emiss(self):
+        data = self.read_reg(self.MLX90614_EMISS)
+        return data
+
 
 if __name__ == "__main__":
     sensor = MLX90614()
@@ -75,6 +79,7 @@ if __name__ == "__main__":
     client.loop_start()
 
     print('reading tempature')
+    print(sensor.read_emiss())
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
