@@ -61,7 +61,12 @@ class MLX90614():
 
     def read_emiss(self):
         data = self.read_reg(self.MLX90614_EMISS)
-        return data
+        return data/65535.0
+
+    def set_emiss(self, emiss):
+        toWrite = int(emiss * 65535.0)
+        return self.bus.write_word_data(self.MLX90614_EMISS,0,toWrite)
+
 
 
 if __name__ == "__main__":
@@ -80,6 +85,8 @@ if __name__ == "__main__":
 
     print('reading tempature')
     print(sensor.read_emiss())
+    print(sensor.set_emiss(.98))
+    print(sensor.read_emiss())
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
@@ -88,7 +95,6 @@ if __name__ == "__main__":
             # Sending temperature data to ThingsBoard
             client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
             print(temp)
-            sleep(1)
 
     client.loop_stop()
     client.disconnect()
