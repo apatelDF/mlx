@@ -70,9 +70,9 @@ class MLX90614():
         toWrite = int(emiss * 65535.0)
         for i in range(self.comm_retries):
             try:
-                self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0x0) # set data to 0
+                self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0x00000) # set data to 0
                 sleep(1)
-                self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0xfae0)
+                self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
                 return True
             except IOError as e:
                 sleep(self.comm_sleep_amount)
@@ -103,9 +103,9 @@ if __name__ == "__main__":
             print('HIGH HEAT DETECTED')
             sensor_data['temperature'] = temp
             # Sending temperature data to ThingsBoard
-            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 1)
-            print(temp)
-            sleep(.1)
+            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
+            sleep(.5)
+        print(temp)
 
     client.loop_stop()
     client.disconnect()
