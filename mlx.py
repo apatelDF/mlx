@@ -72,7 +72,7 @@ class MLX90614():
             try:
                 self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0) # set data to 0
                 sleep(1)
-                self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
+                self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0xfae0)
                 return True
             except IOError as e:
                 sleep(self.comm_sleep_amount)
