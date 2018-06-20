@@ -64,7 +64,7 @@ class MLX90614():
         return data/65535.0
 
     def set_emiss(self, emiss):
-        if(emiss < .1 or emiss > 1.0)
+        if(emiss < .1 or emiss > 1.0):
             return False
 
         toWrite = int(emiss * 65535.0)
