@@ -82,8 +82,8 @@ class MLX90614():
 if __name__ == "__main__":
     sensor = MLX90614()
 
-    THINGSBOARD_HOST = 'demo.thingsboard.io'
-    ACCESS_TOKEN = 'vfNbBlqPnvGcJLcAAnxC'
+    THINGSBOARD_HOST = 'api.thethings.io'
+    ACCESS_TOKEN = 'emIdqA1yapthfrz-ccqzz_d3uVUPutUgtxo5pc9e9uc'
     sensor_data = {'temperature': 0}
     client = mqtt.Client()
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
             print('HIGH HEAT DETECTED')
             sensor_data['temperature'] = temp
             # Sending temperature data to ThingsBoard
-            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
+            client.publish('v2/things/', json.dumps(sensor_data), 0)
             sleep(.5)
         print(temp)
 
