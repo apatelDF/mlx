@@ -1,19 +1,10 @@
-from __future__ import print_function
-from apiclient.discovery import build
-from httplib2 import Http
-from oauth2client import file, client, tools
-import csv
-import smbus
 from time import sleep
+import smbus
 import datetime
-
+import paho.mqtt.client as mqtt
+import json
 
 ALERT_TEMP = 86 #150
-
-#Sheets API info
-SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-SPREADSHEET_ID = '1i7hpVYx8hqEttTNwG466T8QIJRDzamklTQF5cwYoVN8'
-
 
 class MLX90614():
 
@@ -48,7 +39,7 @@ class MLX90614():
             try:
                 return self.bus.read_word_data(self.address, reg_addr)
             except IOError as e:
-                #"Rate limiting" - sleeping to prevent problems with sensor 
+                #"Rate limiting" - sleeping to prevent problems with sensor
                 #when requesting data too quickly
                 sleep(self.comm_sleep_amount)
         #By this time, we made a couple requests and the sensor didn't respond
@@ -68,41 +59,53 @@ class MLX90614():
         data = self.read_reg(self.MLX90614_TOBJ1)
         return self.data_to_temp(data)
 
+    def read_emiss(self):
+        data = self.read_reg(self.MLX90614_EMISS)
+        return data/65535.0
+
+    def set_emiss(self, emiss):
+        if(emiss < .1 or emiss > 1.0):
+            return False
+
+        toWrite = int(emiss * 65535.0)
+        for i in range(self.comm_retries):
+            try:
+                self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0x00000) # set data to 0
+                sleep(1)
+                self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
+                return True
+            except IOError as e:
+                sleep(self.comm_sleep_amount)
+
+        return False;
 
 if __name__ == "__main__":
-    # Setup the Sheets API
-    # Must log into account on browser and aprove use once
-    store = file.Storage('credentials.json')
-    creds = store.get()
-    if not creds or creds.invalid:
-        flow = client.flow_from_clientsecrets('client_secret.json', SCOPES)
-        creds = tools.run_flow(flow, store)
-    service = build('sheets', 'v4', http=creds.authorize(Http()))
-    
     sensor = MLX90614()
+
+    THINGSBOARD_HOST = 'demo.thingsboard.io'
+    ACCESS_TOKEN = 'vfNbBlqPnvGcJLcAAnxC'
+    sensor_data = {'temperature': 0}
+    client = mqtt.Client()
+
+    # Set access token
+    client.username_pw_set(ACCESS_TOKEN)
+    # Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
+    client.connect(THINGSBOARD_HOST, 1883, 60)
+    client.loop_start()
+
     print('reading tempature')
+    print(sensor.read_emiss())
+    print(sensor.set_emiss(.98))
+    print(sensor.read_emiss())
     while(True):
-        vals = [[]]
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            date = str(datetime.datetime.today()).split()[0]
-            time = str(datetime.datetime.today()).split()[1]
-            # Store vales in a 2d array to be uploaded
-            vals[0].append(date)
-            vals[0].append(time)
-            vals[0].append(str(temp))
-            
-            # Call the Sheets API
-            print('uploading to sheets')
-            body = {
-                'values': vals
-            }
-            result = service.spreadsheets().values().append(
-                spreadsheetId = SPREADSHEET_ID,
-                range='A1',
-                valueInputOption='USER_ENTERED',
-                body=body).execute()
-            
-            print('reading tempature')
-                
+            sensor_data['temperature'] = temp
+            # Sending temperature data to ThingsBoard
+            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
+            sleep(.5)
+        print(temp)
+
+    client.loop_stop()
+    client.disconnect()
