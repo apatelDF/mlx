@@ -2,6 +2,9 @@
 
 using namespace std;
 
+//function declarations
+double map(double val, double min, double max, double newMin,double newMax);
+
 int main()
 {
 
