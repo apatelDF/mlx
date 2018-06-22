@@ -11,7 +11,7 @@ int main()
 {
 
   double foo [5] = { 70, 72, 78, 90, 93 };
-  cout<<weightedAverage(foos)<<"\n"<<aveOfAboveAverage(foo)<<"\n";
+  cout<<weightedAverage(foo)<<"\n"<<aveOfAboveAverage(foo)<<"\n";
 
 }
 
@@ -44,7 +44,7 @@ double weightedAverage(double *foo)
     count += maped;
   }
 
-  return average = sum/count;
+  return sum/count;
 }
 
 double aveOfAboveAverage(double *foo)
