@@ -31,10 +31,9 @@ int main()
     count += maped;
   }
 
-  double average = sum/count
+  double average = sum/count;
 
-  cout<<average;
-  cout<<"\n";
+  cout<<average<<"\n";
 
 }
 
