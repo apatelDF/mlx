@@ -1,7 +1,7 @@
 from time import sleep
 import smbus
 import datetime
-from thethings import ThethingsAPI
+import request
 
 ALERT_TEMP = 86 #150
 
@@ -80,16 +80,18 @@ class MLX90614():
 
 if __name__ == "__main__":
     sensor = MLX90614()
-    ACCESS_TOKEN = 'emIdqA1yapthfrz-ccqzz_d3uVUPutUgtxo5pc9e9uc'
-    thing = ThethingsAPI(ACCESS_TOKEN)
+    ACCESS_TOKEN = '3ed938cf62cb2389f26c1617961e8b55'
+    url = 'https://corlysis.com:8086/write'
+    params = {"db": "mlx", "u": "token", "p": "3ed938cf62cb2389f26c1617961e8b55"}
+    payload = "temperature, value=20.64\n"
 
     print('reading tempature')
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            thing.addVar('temperature', temp)
-            print(thing.write())
+            payload = "temperature, value=" + str(temp) + "\n"
+            r = requests.post(url, params=params, data=payload)
             # Sending temperature data to The Things io
             sleep(.2)
         print(temp)
