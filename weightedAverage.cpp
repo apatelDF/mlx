@@ -8,9 +8,9 @@ int main()
   double foo [5] = { 70, 72, 78, 90, 93 };
   double max = foo[0];
   double min = foo[0];
-  int size = foo.size();
+  int size = 5;
 
-  for (int i = 1; i < size); i++){ // get min and max
+  for (int i = 1; i < size; i++){ // get min and max
 
       if(foo[i] < min)
         min = foo[i];
