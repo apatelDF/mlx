@@ -54,7 +54,7 @@ double aveOfAboveAverage(double *foo)
   for(int i = 0; i < size; i++){
     sum += foo[i];
   }
-  double average = sum /(size*1/0);
+  double average = sum /(size*1.0);
 
   sum = 0;
   double count = 0;
