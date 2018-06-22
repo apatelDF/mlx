@@ -26,7 +26,7 @@ int main()
   double count = 0;
 
   for(int i = 0; i < size; i++){
-    maped = map(foo[i], min, max, 0, 100);
+    double maped = map(foo[i], min, max, 0, 100);
     sum += foo[i] * maped;
     count += maped;
   }
