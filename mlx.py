@@ -1,8 +1,7 @@
 from time import sleep
 import smbus
 import datetime
-import paho.mqtt.client as mqtt
-import json
+from thethings import ThethingsAPI
 
 ALERT_TEMP = 86 #150
 
@@ -71,7 +70,7 @@ class MLX90614():
         for i in range(self.comm_retries):
             try:
                 self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0x00000) # set data to 0
-                sleep(1)
+                sleep(.11)
                 self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
                 return True
             except IOError as e:
@@ -81,31 +80,17 @@ class MLX90614():
 
 if __name__ == "__main__":
     sensor = MLX90614()
-
-    THINGSBOARD_HOST = 'api.thethings.io'
     ACCESS_TOKEN = 'emIdqA1yapthfrz-ccqzz_d3uVUPutUgtxo5pc9e9uc'
-    sensor_data = {'temperature': 0}
-    client = mqtt.Client()
-
-    # Set access token
-    client.username_pw_set(ACCESS_TOKEN)
-    # Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
-    client.connect(THINGSBOARD_HOST, 1883, 60)
-    client.loop_start()
+    thing = ThethingsAPI(ACCESS_TOKEN)
 
     print('reading tempature')
-    print(sensor.read_emiss())
-    print(sensor.set_emiss(.98))
-    print(sensor.read_emiss())
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
             sensor_data['temperature'] = temp
-            # Sending temperature data to ThingsBoard
-            client.publish('v2/things/', json.dumps(sensor_data), 0)
-            sleep(.5)
+            thing.addVar('temperature', temp)
+            print(thethings.write())
+            # Sending temperature data to The Things io
+            sleep(.2)
         print(temp)
-
-    client.loop_stop()
-    client.disconnect()
