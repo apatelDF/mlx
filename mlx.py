@@ -1,7 +1,7 @@
 from time import sleep
 import smbus
 import datetime
-import request
+import requests
 
 ALERT_TEMP = 86 #150
 
