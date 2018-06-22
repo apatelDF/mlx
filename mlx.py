@@ -89,7 +89,7 @@ if __name__ == "__main__":
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
             thing.addVar('temperature', temp)
-            print(thethings.write())
+            print(thing.write())
             # Sending temperature data to The Things io
             sleep(.2)
         print(temp)
