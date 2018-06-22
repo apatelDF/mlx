@@ -90,7 +90,7 @@ if __name__ == "__main__":
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            payload = "temperature, value=" + str(temp) + "\n"
+            payload = "temperature,place=office value=" + str(temp) + "\n"
             r = requests.post(url, params=params, data=payload)
             # Sending temperature data to The Things io
             sleep(.2)
