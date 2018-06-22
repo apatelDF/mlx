@@ -40,6 +40,7 @@ double weightedAverage(double *foo)
 
   for(int i = 0; i < size; i++){
     double maped = map(foo[i], min, max, 0, 100);
+    cout<<maped;
     sum += foo[i] * maped;
     count += maped;
   }
