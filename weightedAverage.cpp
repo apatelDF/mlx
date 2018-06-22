@@ -17,7 +17,7 @@ int main()
 
 double map(double val, double min, double max, double newMin,double newMax)
 {
-  return  (val - min) / (min - max) * (newMax - newMin) + newMin;
+  return -1 * ((val - min) / (min - max) * (newMax - newMin) + newMin);
 }
 
 double weightedAverage(double *foo)
