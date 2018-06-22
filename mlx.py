@@ -88,7 +88,6 @@ if __name__ == "__main__":
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            sensor_data['temperature'] = temp
             thing.addVar('temperature', temp)
             print(thethings.write())
             # Sending temperature data to The Things io
