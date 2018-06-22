@@ -24,7 +24,7 @@ double weightedAverage(double *foo)
 {
   double max = foo[0];
   double min = foo[0];
-  int size = sizeof(foo);
+  int size = sizeof(foo) + 1;
 
   for (int i = 1; i < size; i++){ // get min and max
 
@@ -50,7 +50,7 @@ double weightedAverage(double *foo)
 
 double aveOfAboveAverage(double *foo)
 {
-  int size = sizeof(foo);
+  int size = sizeof(foo) + 1;
   double sum = 0;
   for(int i = 0; i < size; i++){
     sum += foo[i];
