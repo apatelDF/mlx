@@ -33,7 +33,8 @@ int main()
 
   double average = sum/count
 
-  cout<<average<<"\n";
+  cout<<average;
+  cout<<"\n";
 
 }
 
