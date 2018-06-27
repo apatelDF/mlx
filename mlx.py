@@ -89,7 +89,7 @@ if __name__ == "__main__":
     for i in range(0,5):
         try:
             print "Requesting Ubidots token"
-            api = ApiClient('A1E-fBGYb7DSrNzPkyAt5uFVL6KdKrpk8Q')
+            api = ApiClient('fBGYb7DSrNzPkyAt5uFVL6KdKrpk8Q')
             break
             # Replace with your Ubidots API Key here
         except:
