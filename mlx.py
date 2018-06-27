@@ -90,7 +90,7 @@ if __name__ == "__main__":
             # Replace with your Ubidots API Key here
         except:
             print "Failed connection, retrying..."
-            time.sleep(5)
+            sleep(5)
 
     while(True):
         temp = sensor.get_obj_temp() #get temp
