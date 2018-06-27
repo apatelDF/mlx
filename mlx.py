@@ -82,6 +82,10 @@ if __name__ == "__main__":
 
     #Connect to Ubidots
 
+
+    print "Requesting Ubidots token"
+    api = ApiClient('A1E-1O6GYF9lvmjQHiRhPvy8R3jkQrc9Qn')
+
     for i in range(0,5):
         try:
             print "Requesting Ubidots token"
@@ -91,7 +95,6 @@ if __name__ == "__main__":
         except:
             print "Failed connection, retrying..."
             sleep(5)
-
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
