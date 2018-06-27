@@ -96,7 +96,7 @@ if __name__ == "__main__":
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            api.save_collection([{"variable": 5b27dbe8c03f975349b6f639, "value": temp}])
+            api.save_collection([{"variable": "5b27dbe8c03f975349b6f639", "value": str(temp)}])
             # Sending temperature data to ThingsBoard
             sleep(.5)
         print(temp)
