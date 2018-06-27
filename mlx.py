@@ -1,8 +1,6 @@
 from time import sleep
 import smbus
-import datetime
-import paho.mqtt.client as mqtt
-import json
+from ubidots import ApiClient
 
 ALERT_TEMP = 86 #150
 
@@ -82,30 +80,23 @@ class MLX90614():
 if __name__ == "__main__":
     sensor = MLX90614()
 
-    THINGSBOARD_HOST = 'demo.thingsboard.io'
-    ACCESS_TOKEN = 'vfNbBlqPnvGcJLcAAnxC'
-    sensor_data = {'temperature': 0}
-    client = mqtt.Client()
+    #Connect to Ubidots
 
-    # Set access token
-    client.username_pw_set(ACCESS_TOKEN)
-    # Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
-    client.connect(THINGSBOARD_HOST, 1883, 60)
-    client.loop_start()
+    for i in range(0,5):
+        try:
+            print "Requesting Ubidots token"
+            api = ApiClient('A1E-1O6GYF9lvmjQHiRhPvy8R3jkQrc9Qn')
+            break
+            # Replace with your Ubidots API Key here
+        except:
+            print "Failed connection, retrying..."
+            time.sleep(5)
 
-    print('reading tempature')
-    print(sensor.read_emiss())
-    print(sensor.set_emiss(.98))
-    print(sensor.read_emiss())
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
             print('HIGH HEAT DETECTED')
-            sensor_data['temperature'] = temp
+            api.save_collection([{"variable": 5b27dbe8c03f975349b6f639, "value": temp}])
             # Sending temperature data to ThingsBoard
-            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
             sleep(.5)
         print(temp)
-
-    client.loop_stop()
-    client.disconnect()
