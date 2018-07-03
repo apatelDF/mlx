@@ -74,7 +74,7 @@ class MLX90614():
             except IOError as e:
                 sleep(self.comm_sleep_amount)
 
-    def read_byte(address):
+    def read_byte(self, address):
         for i in range(self.comm_retries):
             try:
                 return self.bus.read_byte(address)
