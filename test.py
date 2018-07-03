@@ -105,12 +105,12 @@ if __name__ == '__main__':
     iotHubConn = IoTHub(connectionString)
     #d2cMsgSender = D2CMsgSender(connectionString)
 
-    try:
-        #Uncomment this code if you want the device to self-register with IoT Hub. Otherwise use Device Explorer to register device.
-        print('Registering device... ' + deviceId)
-        print(iotHubConn.registerDevice(deviceId))
-    except Exception as e:
-        print("Device was already registered")
+    # try:
+    #     #Uncomment this code if you want the device to self-register with IoT Hub. Otherwise use Device Explorer to register device.
+    #     print('Registering device... ' + deviceId)
+    #     print(iotHubConn.registerDevice(deviceId))
+    # except Exception as e:
+    #     print("Device was already registered")
 
     while True:
         try:
@@ -121,7 +121,7 @@ if __name__ == '__main__':
                 etag = etag.replace('"', '').strip()
                 ackresponse = iotHubConn.ackC2DMsg(deviceId, etag)
             else:
-                print('No messages from IoT Hub')
+                print('No messages from IoT Hub response:' + str(response[1]))
 
             temp = str(100)
             jsonMessage = telemetry(temp)
