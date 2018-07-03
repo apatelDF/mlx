@@ -1,7 +1,6 @@
 """
 Sample code demonstrating Sense HAT running on Raspian and Raspberry Pi 3 receiving messages from Azure IoT Hub using Azure IoT Hub REST API.
 Azure IoT Hub REST API reference https://docs.microsoft.com/en-us/rest/api/iothub/
-Sense HAT API reference https://pythonhosted.org/sense-hat/api/
 Adapted from https://github.com/Azure-Samples/iot-hub-python-get-started
 """
 
@@ -18,7 +17,7 @@ import json
 
 class IoTHub:
 
-    API_VERSION = '2016-02-03'
+    API_VERSION = '2018-06-30'
     TOKEN_VALID_SECS = 10
     TOKEN_FORMAT = 'SharedAccessSignature sig=%s&se=%s&skn=%s&sr=%s'
 
@@ -122,7 +121,6 @@ if __name__ == '__main__':
                 ackresponse = iotHubConn.ackC2DMsg(deviceId, etag)
             else:
                 print('No messages from IoT Hub response:' + str(response[1]))
-                print('Error from IoT Hub: %s' % (response[0]))
 
             temp = str(100)
             jsonMessage = telemetry(temp)
