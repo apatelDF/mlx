@@ -126,12 +126,11 @@ if __name__ == '__main__':
                     ackresponse = iotHubConn.ackC2DMsg(deviceId, etag)
                 else:
                     # print('No messages from IoT Hub response:' + str(response[1]))
-                jsonMessage = telemetry(temp)
-                print(jsonMessage.toJSON())
-                response = iotHubConn.sendD2CMsg(deviceId, jsonMessage.toJSON())
-                # print(response[1])
-
-                time.sleep(5) # 5 second delay
+                    jsonMessage = telemetry(temp)
+                    print(jsonMessage.toJSON())
+                    response = iotHubConn.sendD2CMsg(deviceId, jsonMessage.toJSON())
+                    # print(response[1])
+                    time.sleep(5) # 5 second delay
 
             except OSError as e:
                 print('Error: ' + str(e))
