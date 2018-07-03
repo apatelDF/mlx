@@ -70,14 +70,10 @@ class MLX90614():
         toWrite = int(emiss * 65535.0)
         for i in range(self.comm_retries):
             try:
-                print(self.bus.write_word_data(self.address, self.MLX90614_EMISS, 0x00000)) # set data to 0
-                sleep(5)
                 print(self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite))
-                return True
             except IOError as e:
                 sleep(self.comm_sleep_amount)
 
-        return False;
 
 if __name__ == "__main__":
     sensor = MLX90614()
@@ -94,9 +90,9 @@ if __name__ == "__main__":
     client.loop_start()
 
     print(sensor.read_emiss())
-    print(sensor.set_emiss(.98))
+    sensor.set_emiss(.98)
     print(sensor.read_emiss())
-    
+
     # while(True):
     #     temp = sensor.get_obj_temp() #get temp
     #     if(temp > ALERT_TEMP):
