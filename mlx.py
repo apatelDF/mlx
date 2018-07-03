@@ -89,7 +89,7 @@ if __name__ == "__main__":
     client.connect(THINGSBOARD_HOST, 1883, 60)
     client.loop_start()
 
-    print(sensor.bus(read_byte(sensor.MLX90614_EMISS)))
+    print(sensor.bus.read_byte(sensor.MLX90614_EMISS))
     print(sensor.read_emiss())
     sensor.set_emiss(.98)
     print(sensor.read_emiss())
