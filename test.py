@@ -115,8 +115,8 @@ if __name__ == '__main__':
     while True:
         temp = sensor.get_obj_temp()
         if(temp > 86):
-            print("HIGH TEMP DETECTED: " + temp)
             temp = str(temp)
+            print("HIGH TEMP DETECTED: " + temp)
             try:
                 response = iotHubConn.receiveC2DMsg(deviceId)
                 if response[1] == 200:
