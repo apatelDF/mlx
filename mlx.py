@@ -81,6 +81,8 @@ class MLX90614():
             except IOError as e:
                 sleep(self.comm_sleep_amount)
 
+        raise e
+
 
 if __name__ == "__main__":
     sensor = MLX90614()
