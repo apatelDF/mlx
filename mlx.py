@@ -1,8 +1,5 @@
 from time import sleep
 import smbus
-from ubidots import ApiClient
-
-ALERT_TEMP = 86 #150
 
 class MLX90614():
 
@@ -76,30 +73,3 @@ class MLX90614():
                 sleep(self.comm_sleep_amount)
 
         return False;
-
-if __name__ == "__main__":
-    sensor = MLX90614()
-
-    #Connect to Ubidots
-
-
-    print "Requesting Ubidots token"
-    api = ApiClient('A1E-1O6GYF9lvmjQHiRhPvy8R3jkQrc9Qn')
-
-    for i in range(0,5):
-        try:
-            print "Requesting Ubidots token"
-            api = ApiClient('A1E-1O6GYF9lvmjQHiRhPvy8R3jkQrc9Qn')
-            break
-            # Replace with your Ubidots API Key here
-        except:
-            print "Failed connection, retrying..."
-            sleep(5)
-    while(True):
-        temp = sensor.get_obj_temp() #get temp
-        if(temp > ALERT_TEMP):
-            print('HIGH HEAT DETECTED')
-            api.save_collection([{"variable": "5b27dbe8c03f975349b6f639", "value": str(temp)}])
-            # Sending temperature data to ThingsBoard
-            sleep(.5)
-        print(temp)

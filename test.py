@@ -13,6 +13,7 @@ import urllib
 import time
 import sys
 import json
+import mlx
 
 
 class IoTHub:
@@ -110,26 +111,30 @@ if __name__ == '__main__':
     #     print(iotHubConn.registerDevice(deviceId))
     # except Exception as e:
     #     print("Device was already registered")
-
+    sensor = mlx()
     while True:
-        try:
-            response = iotHubConn.receiveC2DMsg(deviceId)
-            if response[1] == 200:
-                print('Message from IoT Hub: %s' % (response[0]))
-                etag = response[2]['ETag']
-                etag = etag.replace('"', '').strip()
-                ackresponse = iotHubConn.ackC2DMsg(deviceId, etag)
-            else:
-                print('No messages from IoT Hub response:' + str(response[1]))
+        temp = sensor.get_obj_temp()
+        if(temp > 86):
+            print("HIGH TEMP DETECTED: " + temp)
+            temp = str(temp)
+            try:
+                response = iotHubConn.receiveC2DMsg(deviceId)
+                if response[1] == 200:
+                    # print('Message from IoT Hub: %s' % (response[0]))
+                    etag = response[2]['ETag']
+                    etag = etag.replace('"', '').strip()
+                    ackresponse = iotHubConn.ackC2DMsg(deviceId, etag)
+                else:
+                    # print('No messages from IoT Hub response:' + str(response[1]))
+                jsonMessage = telemetry(temp)
+                print(jsonMessage.toJSON())
+                response = iotHubConn.sendD2CMsg(deviceId, jsonMessage.toJSON())
+                # print(response[1])
 
-            temp = str(100)
-            jsonMessage = telemetry(temp)
-            print(jsonMessage.toJSON())
-            response = iotHubConn.sendD2CMsg(deviceId, jsonMessage.toJSON())
-            print(response[1])
+                time.sleep(5) # 5 second delay
 
-            time.sleep(5) # 5 second delay
-
-        except OSError as e:
-            print('Error: ' + str(e))
-            break
+            except OSError as e:
+                print('Error: ' + str(e))
+                break
+        else:
+            print(str(temp))
