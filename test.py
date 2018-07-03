@@ -108,12 +108,15 @@ if __name__ == '__main__':
     iotHubConn = IoTHub(connectionString)
     #d2cMsgSender = D2CMsgSender(connectionString)
 
+    try:
+        #Uncomment this code if you want the device to self-register with IoT Hub. Otherwise use Device Explorer to register device.
+        print('Registering device... ' + deviceId)
+        print(iotHubConn.registerDevice(deviceId))
+    except Exception as e:
+        print("Device was already registered")
+
     while True:
         try:
-            #Uncomment this code if you want the device to self-register with IoT Hub. Otherwise use Device Explorer to register device.
-            print('Registering device... ' + deviceId)
-            print(iotHubConn.registerDevice(deviceId))
-
             response = iotHubConn.receiveC2DMsg(deviceId)
             if response[1] == 200:
                 print('Message from IoT Hub: %s' % (response[0]))
