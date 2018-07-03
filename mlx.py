@@ -97,15 +97,15 @@ if __name__ == "__main__":
     print(sensor.read_emiss())
     print(sensor.set_emiss(.98))
     print(sensor.read_emiss())
-    while(True):
-        temp = sensor.get_obj_temp() #get temp
-        if(temp > ALERT_TEMP):
-            print('HIGH HEAT DETECTED')
-            sensor_data['temperature'] = temp
-            # Sending temperature data to ThingsBoard
-            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
-            sleep(.5)
-        print(temp)
-
-    client.loop_stop()
-    client.disconnect()
+    # while(True):
+    #     temp = sensor.get_obj_temp() #get temp
+    #     if(temp > ALERT_TEMP):
+    #         print('HIGH HEAT DETECTED')
+    #         sensor_data['temperature'] = temp
+    #         # Sending temperature data to ThingsBoard
+    #         client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
+    #         sleep(.5)
+    #     print(temp)
+    #
+    # client.loop_stop()
+    # client.disconnect()
