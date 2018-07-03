@@ -80,12 +80,9 @@ class IoTHub:
         return r.text, r.status_code
 
 class telemetry :
-    def __init__(self, pitch, yaw, roll, temp):
+    def __init__(self, temp):
         """Return a new object."""
         self.DeviceId = deviceId
-        self.pitch = pitch
-        self.yaw = yaw
-        self.roll = roll
         self.Temperature = float(temp)
 
     def toJSON(self):
@@ -127,7 +124,7 @@ if __name__ == '__main__':
                 print('No messages from IoT Hub')
 
             temp = str(100)
-            jsonMessage = telemetry("{pitch}".format(**orientation),"{yaw}".format(**orientation),"{roll}".format(**orientation),temp=temp)
+            jsonMessage = telemetry(temp)
             print(jsonMessage.toJSON())
             response = iotHubConn.sendD2CMsg(deviceId, jsonMessage.toJSON())
             print(response[1])
