@@ -13,7 +13,7 @@ import urllib
 import time
 import sys
 import json
-import mlx
+from mlx import MLX90614
 
 
 class IoTHub:
@@ -111,7 +111,7 @@ if __name__ == '__main__':
     #     print(iotHubConn.registerDevice(deviceId))
     # except Exception as e:
     #     print("Device was already registered")
-    sensor = mlx()
+    sensor = MLX90614(0x5a)
     while True:
         temp = sensor.get_obj_temp()
         if(temp > 86):
