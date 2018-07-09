@@ -70,7 +70,7 @@ class MLX90614():
         return data/65535.0
 
     def emissCalibration(self, tempMeasured):
-        return tempMeasured * self.newEmiss**0.25
+        return tempMeasured * (1 / self.newEmiss ** 0.25)
 
 
     # def set_emiss(self, emiss): #Not Working
