@@ -83,6 +83,7 @@ class MLX90614():
         print("New Emiss is set to: " + self.newEmiss)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> parent of 7d020dc... debug
@@ -98,6 +99,8 @@ class MLX90614():
     #             self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
     #         except IOError as e:
     #             sleep(self.comm_sleep_amount)
+=======
+>>>>>>> parent of 7d020dc... debug
 
 if __name__ == "__main__":
     sensor = MLX90614()
