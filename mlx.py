@@ -46,7 +46,7 @@ class MLX90614():
         #(judging by the fact we haven't returned from this function yet)
         #So let's just re-raise the last IOError we got
         raise e
-
+        # default emisstivity is 1.0
     def data_to_temp(self, data): # data *.02 = Kelvin
         temp = (data*.036) - 459.67 # Convert to F
         return temp
@@ -63,21 +63,22 @@ class MLX90614():
         data = self.read_reg(self.MLX90614_EMISS)
         return data/65535.0
 
-    def set_emiss(self, emiss):
-        if(emiss < .1 or emiss > 1.0):
-            return False
-
-        toWrite = int(emiss * 65535.0)
-        print("Attempting to write: " + str(toWrite))
-        for i in range(self.comm_retries):
-            try:
-                self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
-            except IOError as e:
-                sleep(self.comm_sleep_amount)
+    # def set_emiss(self, emiss): #Not Working
+    #     if(emiss < .1 or emiss > 1.0):
+    #         return False
+    #
+    #     toWrite = int(emiss * 65535.0)
+    #     print("Attempting to write: " + str(toWrite))
+    #     for i in range(self.comm_retries):
+    #         try:
+    #             self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
+    #         except IOError as e:
+    #             sleep(self.comm_sleep_amount)
 
 if __name__ == "__main__":
     sensor = MLX90614()
 
+    log = open("log.csv", "a")
     THINGSBOARD_HOST = 'demo.thingsboard.io'
     ACCESS_TOKEN = 'vfNbBlqPnvGcJLcAAnxC'
     sensor_data = {'temperature': 0}
@@ -89,20 +90,18 @@ if __name__ == "__main__":
     client.connect(THINGSBOARD_HOST, 1883, 60)
     client.loop_start()
 
-
-    print(sensor.read_emiss())
-    sensor.set_emiss(.98)
-    print(sensor.read_emiss())
-
-    # while(True):
-    #     temp = sensor.get_obj_temp() #get temp
-    #     if(temp > ALERT_TEMP):
-    #         print('HIGH HEAT DETECTED')
-    #         sensor_data['temperature'] = temp
-    #         # Sending temperature data to ThingsBoard
-    #         client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
-    #         sleep(.5)
-    #     print(temp)
-    #
-    # client.loop_stop()
-    # client.disconnect()
+    while(True):
+        temp = sensor.get_obj_temp() #get temp
+        if(temp > ALERT_TEMP):
+            print('HIGH HEAT DETECTED')
+            timeStamp = str(int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000))
+            logString = timeStamp + ", " + str(temp) + "\n"
+            log.write(logString)
+            # Sending temperature data to ThingsBoard
+            sensor_data['temperature'] = temp
+            client.publish('v1/devices/me/telemetry', json.dumps(sensor_data), 0)
+            sleep(.5)
+        print(temp)
+    log.close()
+    client.loop_stop()
+    client.disconnect()
