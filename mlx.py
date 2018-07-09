@@ -68,21 +68,12 @@ class MLX90614():
             return False
 
         toWrite = int(emiss * 65535.0)
+        print("Attempting to write: " + str(toWrite))
         for i in range(self.comm_retries):
             try:
                 self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
             except IOError as e:
                 sleep(self.comm_sleep_amount)
-
-    def read_byte(self, address):
-        for i in range(self.comm_retries):
-            try:
-                return self.bus.read_byte(address)
-            except IOError as e:
-                sleep(self.comm_sleep_amount)
-
-        raise e
-
 
 if __name__ == "__main__":
     sensor = MLX90614()
@@ -98,7 +89,7 @@ if __name__ == "__main__":
     client.connect(THINGSBOARD_HOST, 1883, 60)
     client.loop_start()
 
-    print(sensor.read_byte(sensor.MLX90614_EMISS))
+
     print(sensor.read_emiss())
     sensor.set_emiss(.98)
     print(sensor.read_emiss())
