@@ -6,8 +6,8 @@ temperatures = []
 data = open("log.csv", "r")
 for line in data:
     temp = line.split(",")
-    x.append(temp[0])
-    y.append(temp[1])
+    timeStamps.append(temp[0])
+    temperatures.append(temp[1])
 
 trace_high = go.Scatter(
     x = timeStamps,
