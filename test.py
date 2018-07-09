@@ -12,7 +12,7 @@ for line in data:
 trace_high = go.Scatter(
     x = timeStamps,
     y = temperatures,
-    name = "Temperature (°F)",
+    name = "Temperature (F)",
     line = dict(color = '#17BECF'),
     opacity = 0.8)
 
