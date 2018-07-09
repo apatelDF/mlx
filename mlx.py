@@ -28,11 +28,16 @@ class MLX90614():
 
     comm_retries = 5
     comm_sleep_amount = 0.1
+    newEmiss = 0
 
-    def __init__(self, address=0x5a, bus_num=1):
+    def __init__(self, address=0x5a, bus_num=1, emiss=1.0):
         self.bus_num = bus_num
         self.address = address
         self.bus = smbus.SMBus(bus=bus_num)
+        self.newEmiss = emiss
+
+    def setEmiss(self, emiss):
+        self.newEmiss = emiss
 
     def read_reg(self, reg_addr):
         for i in range(self.comm_retries):
@@ -47,9 +52,10 @@ class MLX90614():
         #So let's just re-raise the last IOError we got
         raise e
         # default emisstivity is 1.0
+
     def data_to_temp(self, data): # data *.02 = Kelvin
         temp = (data*.036) - 459.67 # Convert to F
-        return temp
+        return convertToNewEmiss(temp) #apply new emiss setting
 
     def get_amb_temp(self):
         data = self.read_reg(self.MLX90614_TA)
@@ -59,9 +65,13 @@ class MLX90614():
         data = self.read_reg(self.MLX90614_TOBJ1)
         return self.data_to_temp(data)
 
-    def read_emiss(self):
+    def readDeviceEmiss(self):
         data = self.read_reg(self.MLX90614_EMISS)
         return data/65535.0
+
+    def convertToNewEmiss(self, tempMeasured):
+        return tempMeasured *  self.newEmiss**0.25
+
 
     # def set_emiss(self, emiss): #Not Working
     #     if(emiss < .1 or emiss > 1.0):
@@ -89,7 +99,7 @@ if __name__ == "__main__":
     # Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
     client.connect(THINGSBOARD_HOST, 1883, 60)
     client.loop_start()
-
+    sensor.setEmiss(.5)
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
