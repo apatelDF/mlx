@@ -52,4 +52,4 @@ layout = dict(
 )
 
 fig = dict(data=data, layout=layout)
-plotly.offline.plot(fig, filename = "Time Series with Rangeslider")
+py.offline.plot(fig, filename = "Time Series with Rangeslider")
