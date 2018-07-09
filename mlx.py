@@ -55,7 +55,7 @@ class MLX90614():
 
     def data_to_temp(self, data): # data *.02 = Kelvin
         temp = (data*.036) - 459.67 # Convert to F
-        return convertToNewEmiss(temp) #apply new emiss setting
+        return self.emissCalibration(temp) #apply new emiss setting
 
     def get_amb_temp(self):
         data = self.read_reg(self.MLX90614_TA)
@@ -69,8 +69,8 @@ class MLX90614():
         data = self.read_reg(self.MLX90614_EMISS)
         return data/65535.0
 
-    def convertToNewEmiss(self, tempMeasured):
-        return tempMeasured *  self.newEmiss**0.25
+    def emissCalibration(self, tempMeasured):
+        return tempMeasured * self.newEmiss**0.25
 
 
     # def set_emiss(self, emiss): #Not Working
