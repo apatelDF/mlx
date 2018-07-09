@@ -4,7 +4,7 @@ import datetime
 import paho.mqtt.client as mqtt
 import json
 
-ALERT_TEMP = 0 #150
+ALERT_TEMP = 86 #150
 
 class MLX90614():
 
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     # Connect to ThingsBoard using default MQTT port and 60 seconds keepalive interval
     client.connect(THINGSBOARD_HOST, 1883, 60)
     client.loop_start()
-    sensor.setEmiss(.5)
+    sensor.setEmiss(.98)
     while(True):
         temp = sensor.get_obj_temp() #get temp
         if(temp > ALERT_TEMP):
