@@ -1,4 +1,4 @@
-import plotly.plotly as py
+import plotly
 import plotly.graph_objs as go
 
 timeStamps = []
@@ -51,5 +51,9 @@ layout = dict(
     )
 )
 
-fig = dict(data=data, layout=layout)
-py.offline.plot(fig, filename = "Time Series with Rangeslider")
+# fig = dict(data=data, layout=layout)
+# py.offline.plot(fig, filename = "Time Series with Rangeslider")
+plotly.offline.plot({
+    "data": data,
+    "layout": layout
+}, auto_open=True)
