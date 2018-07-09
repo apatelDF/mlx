@@ -82,12 +82,6 @@ class MLX90614():
         self.newEmiss = average / 10.0
         print("New Emiss is set to: " + self.newEmiss)
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 7d020dc... debug
-
     # def set_emiss(self, emiss): #Not Working
     #     if(emiss < .1 or emiss > 1.0):
     #         return False
@@ -99,9 +93,7 @@ class MLX90614():
     #             self.bus.write_word_data(self.address, self.MLX90614_EMISS, toWrite)
     #         except IOError as e:
     #             sleep(self.comm_sleep_amount)
-=======
->>>>>>> parent of 7d020dc... debug
-
+    
 if __name__ == "__main__":
     sensor = MLX90614()
 
