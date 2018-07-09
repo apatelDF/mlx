@@ -82,7 +82,10 @@ class MLX90614():
         self.newEmiss = average / 10.0
         print("New Emiss is set to: " + self.newEmiss)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> parent of 7d020dc... debug
 
     # def set_emiss(self, emiss): #Not Working
     #     if(emiss < .1 or emiss > 1.0):
