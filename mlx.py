@@ -4,7 +4,7 @@ import datetime
 import paho.mqtt.client as mqtt
 import json
 
-ALERT_TEMP = 86 #150
+ALERT_TEMP = 0 #150
 
 class MLX90614():
 
